@@ -1,6 +1,7 @@
 // MAIN BACKEND FILE
 
 const db = require("./database");
+const mongoose = require('mongoose');
 // console.log(db.books);
 // console.log(db.authors);
 // console.log(db.publications);
@@ -10,6 +11,35 @@ const express = require("express");
 const app = express();
 
 app.use(express.json());
+
+const { MongoClient } = require('mongodb');
+ const uri = "mongodb+srv://akash_shukla:akashshukla506@cluster0.uu9ix.mongodb.net/book-company?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+client.connect(err => {
+  client.connect(err => {
+    const bcollection = client.db("book-company").collection("books").findOne({ISBN: "12345Two"});
+    bcollection.then((data)=>console.log(data)).catch((err)=>console.log(err));
+
+});
+});
+
+
+/* async function main() {
+    const uri = "mongodb+srv://nikhil_agarwal:p5nfHZEoRnTA2VGb@cluster0.arwlh.mongodb.net/book-company?retryWrites=true&w=majority";
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    try {
+        await client.connect();
+        await listDatabases(client);
+    }
+    catch(err) {
+        console.log(err);
+    }
+    finally {
+        await client.close();
+    }
+}
+main(); */
+
 
 // http://localhost:2000/
 app.get("/", (req, res) => {
@@ -159,7 +189,7 @@ app.put("/publication-update/:id", (req, res) => {
 
 
 // http://localhost:2000/book-delete/12345ONE
-app.delete("/book-delete/:isbn", (req, res) => {
+app.delete("/book-delete/:isbn", (req, res)  => {
     console.log(req.params);
     const {isbn} = req.params;
     const filteredBooks = db.books.filter((book) =>  book.ISBN!==isbn); 
