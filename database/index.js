@@ -23,12 +23,12 @@ let books = [
   
   let authors = [
     {
-      id: 1,
+      ID: 1,
       name: "nikhil",
-      books: ["12345ONE", "12345Two"],
+      books: ["12345ONE", "12345Two"]
     },
     {
-      id: 2,
+      ID: 2,
       name: "ram",
       books: ["12345ONE", "12345Two"],
     }
@@ -36,12 +36,12 @@ let books = [
   
   let publications = [
     {
-      id: 1,
+      ID: 1,
       name: "ShapeAI Publications",
-      books: ["12345ONE", "12345Two"],
+      books: ["12345ONE", "12345Two"]
     },
     {
-      id: 2,
+      ID: 2,
       name: "Agarwal Publications",
       books: [],
     }

@@ -83,7 +83,6 @@ app.get("/publications", (req, res) => {
 });
 
 // http://localhost:2000/publications-isbn/12345Two
-// TOBEFIXED
 app.get("/publications-isbn/:isbn", (req, res) => {
     // console.log(req.params);
     let {isbn} = req.params;
@@ -144,19 +143,18 @@ app.put("/author-update/:id", (req, res) => {
 });
 
 // http://localhost:2000/publication-update/1
-// To be Done
-app.put("/author-update/:id", (req, res) => {
+app.put("/publication-update/:id", (req, res) => {
     console.log(req.body);
     console.log(req.params);
     const {id} = req.params;
-    db.authors.forEach((author) => {
-        if(author.ID === id) {
-            console.log({...author, ...req.body})
-            return {...author, ...req.body};
+    db.publications.forEach((publication) => {
+        if(publication.ID === id) {
+            console.log({...publication, ...req.body})
+            return {...publication, ...req.body};
         }
-        return author;
+        return publication;
     })
-    return res.json(db.authors);
+    return res.json(db.publications);
 });
 
 
@@ -168,6 +166,28 @@ app.delete("/book-delete/:isbn", (req, res) => {
     console.log(filteredBooks);
     db.books = filteredBooks;
     return res.json(db.books);
+});
+
+// http://localhost:2000/author-delete/1
+app.delete("/author-delete/:id", (req, res) => {
+    console.log(req.params);
+    let {id} = req.params;
+    id = Number(id);
+    const filteredAuthors = db.authors.filter((author) =>  author.ID!==id); 
+    console.log(filteredAuthors);
+    db.authors = filteredAuthors;
+    return res.json(db.authors);
+});
+
+// http://localhost:2000/publication-delete/1
+app.delete("/publication-delete/:id", (req, res) => {
+    console.log(req.params);
+    let {id} = req.params;
+    id = Number(id);
+    const filteredPublications = db.publications.filter((publication) =>  publication.ID!==id); 
+    console.log(filteredPublications);
+    db.publications = filteredPublications;
+    return res.json(db.publications);
 });
 
 // http://localhost:2000/book-author-delete/12345ONE/1
@@ -187,6 +207,26 @@ app.delete("/book-author-delete/:isbn/:id", (req, res) => {
     }); 
     return res.json(db.books);
 });
+
+// http://localhost:2000/author-book-delete/1/12345Two
+app.delete("/author-book-delete/:id/:books", (req, res) => {
+    console.log(req.params);
+    let {id, books} = req.params;
+    
+    id = Number(id);
+    db.authors.forEach((author) =>  {
+        if(author.ID === id) {
+            if(!author.books.includes(books)) {
+                return;
+            }
+            author.books = author.books.filter((book) => book!==books);
+            return author;
+        }
+        return author;
+    }); 
+    return res.json(db.authors);
+});
+
 
 app.listen(2000, () => {
     console.log("MY EXPRESS APP IS RUNNING.....")
